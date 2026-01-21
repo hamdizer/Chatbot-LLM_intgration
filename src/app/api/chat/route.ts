@@ -5,11 +5,12 @@ export async function POST(req: NextRequest) {
     const { messages } = await req.json();
 
     const response = await fetch(
-      "https://api.groq.com/openai/v1/chat/completions",
+      process.env.NEXT_PUBLIC_GROQ_API ||
+        "https://api.groq.com/openai/v1/chat/completions",
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.REACT_APP_GROQ_API_KEY}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_GROQ_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -27,7 +28,6 @@ export async function POST(req: NextRequest) {
       throw new Error(error.error?.message || "Groq API error");
     }
 
-    // IMPORTANT: Return the stream directly without transformation
     return new Response(response.body, {
       headers: {
         "Content-Type": "text/event-stream",

@@ -192,7 +192,7 @@ export default function ChatbotUI() {
           }
         }
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("API error:", error);
       setIsTyping(false);
@@ -262,7 +262,6 @@ export default function ChatbotUI() {
 
   return (
     <div className="flex fixed inset-0 w-full h-full bg-gray-900">
-      {/* Sidebar */}
       <div
         className={`${sidebarOpen ? "w-80" : "w-0"} transition-all duration-300 bg-gray-800 border-r border-gray-700 flex flex-col overflow-hidden`}
       >
@@ -364,9 +363,7 @@ export default function ChatbotUI() {
         </div>
       </div>
 
-      {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
-        {/* Header */}
         <div className="bg-gray-800 border-b border-gray-700">
           <div className="px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -413,7 +410,6 @@ export default function ChatbotUI() {
           </div>
         </div>
 
-        {/* Messages Container */}
         <div className="flex-1 overflow-y-auto px-6 py-8">
           <div className="max-w-5xl mx-auto">
             {messages.length === 0 ? (
@@ -523,7 +519,6 @@ export default function ChatbotUI() {
           </div>
         </div>
 
-        {/* Input Area */}
         <div className="bg-gray-800 border-t border-gray-700">
           <div className="max-w-5xl mx-auto px-6 py-5">
             <div className="flex gap-3 items-end">
