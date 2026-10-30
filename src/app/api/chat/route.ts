@@ -2,20 +2,25 @@ import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
+    const apiKey = process.env.GROQ_API_KEY;
+    if (!apiKey) {
+      throw new Error("Missing GROQ_API_KEY environment variable");
+    }
+
     const { messages } = await req.json();
 
     const response = await fetch(
-      process.env.NEXT_PUBLIC_GROQ_API ||
+      process.env.GROQ_API ||
         "https://api.groq.com/openai/v1/chat/completions",
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_GROQ_API_KEY}`,
+          Authorization: `Bearer ${apiKey}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
-          messages: messages,
+          model: "openai/gpt-oss-20b",
+          messages,
           temperature: 0.7,
           max_tokens: 1000,
           stream: true,
@@ -35,17 +40,13 @@ export async function POST(req: NextRequest) {
         Connection: "keep-alive",
       },
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Failed to get response from AI";
     console.error("Groq API error:", error);
-    return new Response(
-      JSON.stringify({
-        error: error.message || "Failed to get response from AI",
-      }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      },
-    );
+    return new Response(JSON.stringify({ error: message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }
